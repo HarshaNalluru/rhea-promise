@@ -283,6 +283,7 @@ export class Connection extends Entity {
           this._connection.removeListener(ConnectionEvents.connectionOpen, onOpen);
           this._connection.removeListener(ConnectionEvents.connectionClose, onClose);
           this._connection.removeListener(ConnectionEvents.disconnected, onClose);
+          console.log(`Inside open() - removeListeners(), ${ConnectionEvents.disconnected} listeners count: ${this._connection.listenerCount(ConnectionEvents.disconnected)}`);
         };
 
         onOpen = (context: RheaEventContext) => {
@@ -310,6 +311,13 @@ export class Connection extends Entity {
         this._connection.once(ConnectionEvents.connectionOpen, onOpen);
         this._connection.once(ConnectionEvents.connectionClose, onClose);
         this._connection.once(ConnectionEvents.disconnected, onClose);
+        console.log(
+          `Inside open(), ${
+            ConnectionEvents.disconnected
+          } listeners count: ${this._connection.listenerCount(
+            ConnectionEvents.disconnected
+          )}`
+        );
         waitTimer = setTimeout(actionAfterTimeout, this.options!.operationTimeoutInSeconds! * 1000);
         log.connection("[%s] Trying to create a new amqp connection.", this.id);
         this._connection.connect();
@@ -342,6 +350,13 @@ export class Connection extends Entity {
           this._connection.removeListener(ConnectionEvents.connectionError, onError);
           this._connection.removeListener(ConnectionEvents.connectionClose, onClose);
           this._connection.removeListener(ConnectionEvents.disconnected, onDisconnected);
+          console.log(
+            `Inside close() - removeListeners(), ${
+              ConnectionEvents.disconnected
+            } listeners count: ${this._connection.listenerCount(
+              ConnectionEvents.disconnected
+            )}`
+          );
         };
 
         onClose = (context: RheaEventContext) => {
@@ -377,6 +392,13 @@ export class Connection extends Entity {
         this._connection.once(ConnectionEvents.connectionClose, onClose);
         this._connection.once(ConnectionEvents.connectionError, onError);
         this._connection.once(ConnectionEvents.disconnected, onDisconnected);
+        console.log(
+          `Inside close(), ${
+            ConnectionEvents.disconnected
+          } listeners count: ${this._connection.listenerCount(
+            ConnectionEvents.disconnected
+          )}`
+        );
         waitTimer = setTimeout(actionAfterTimeout, this.options!.operationTimeoutInSeconds! * 1000);
         this._connection.close();
         this.actionInitiated++;
@@ -473,6 +495,13 @@ export class Connection extends Entity {
         rheaSession.removeListener(SessionEvents.sessionOpen, onOpen);
         rheaSession.removeListener(SessionEvents.sessionClose, onClose);
         rheaSession.connection.removeListener(ConnectionEvents.disconnected, onDisconnected);
+        console.log(
+          `Inside createSession() - removeListeners(), ${
+            ConnectionEvents.disconnected
+          } listeners count: ${this._connection.listenerCount(
+            ConnectionEvents.disconnected
+          )}`
+        );
       };
 
       onOpen = (context: RheaEventContext) => {
@@ -509,6 +538,13 @@ export class Connection extends Entity {
       rheaSession.once(SessionEvents.sessionOpen, onOpen);
       rheaSession.once(SessionEvents.sessionClose, onClose);
       rheaSession.connection.once(ConnectionEvents.disconnected, onDisconnected);
+      console.log(
+        `Inside createSession(), ${
+          ConnectionEvents.disconnected
+        } listeners count: ${this._connection.listenerCount(
+          ConnectionEvents.disconnected
+        )}`
+      );
       log.session("[%s] Calling amqp session.begin().", this.id);
       waitTimer = setTimeout(actionAfterTimeout, this.options!.operationTimeoutInSeconds! * 1000);
       rheaSession.begin();

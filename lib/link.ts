@@ -254,6 +254,13 @@ export abstract class Link extends Entity {
           this._link.removeListener(errorEvent, onError);
           this._link.removeListener(closeEvent, onClose);
           this._link.connection.removeListener(ConnectionEvents.disconnected, onDisconnected);
+          console.log(
+            `Inside link.close() - removeListeners, ${
+              ConnectionEvents.disconnected
+            } listeners count: ${this._link.connection.listenerCount(
+              ConnectionEvents.disconnected
+            )}`
+          );
         };
 
         onClose = (context: RheaEventContext) => {
@@ -298,6 +305,14 @@ export abstract class Link extends Entity {
         this._link.once(closeEvent, onClose);
         this._link.once(errorEvent, onError);
         this._link.connection.once(ConnectionEvents.disconnected, onDisconnected);
+        console.log(
+          `Inside link.close(), ${
+            ConnectionEvents.disconnected
+          } listeners count: ${this._link.connection.listenerCount(
+            ConnectionEvents.disconnected
+          )}`
+        );
+
         waitTimer = setTimeout(actionAfterTimeout,
           this.connection.options!.operationTimeoutInSeconds! * 1000);
         this._link.close();

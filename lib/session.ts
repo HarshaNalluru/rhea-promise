@@ -159,6 +159,13 @@ export class Session extends Entity {
           this._session.removeListener(SessionEvents.sessionError, onError);
           this._session.removeListener(SessionEvents.sessionClose, onClose);
           this._session.connection.removeListener(ConnectionEvents.disconnected, onDisconnected);
+          console.log(
+            `Inside session.close() - removeListeners(), ${
+              ConnectionEvents.disconnected
+            } listeners count: ${this._session.connection.listenerCount(
+              ConnectionEvents.disconnected
+            )}`
+          );
         };
 
         onClose = (context: RheaEventContext) => {
@@ -195,6 +202,13 @@ export class Session extends Entity {
         this._session.once(SessionEvents.sessionClose, onClose);
         this._session.once(SessionEvents.sessionError, onError);
         this._session.connection.once(ConnectionEvents.disconnected, onDisconnected);
+        console.log(
+          `Inside session.close(), ${
+            ConnectionEvents.disconnected
+          } listeners count: ${this._session.connection.listenerCount(
+            ConnectionEvents.disconnected
+          )}`
+        );
         log.session("[%s] Calling session.close() for amqp session '%s'.", this.connection.id, this.id);
         waitTimer = setTimeout(actionAfterTimeout, this.connection.options!.operationTimeoutInSeconds! * 1000);
         this._session.close();
@@ -293,6 +307,13 @@ export class Session extends Entity {
         rheaReceiver.removeListener(ReceiverEvents.receiverOpen, onOpen);
         rheaReceiver.removeListener(ReceiverEvents.receiverClose, onClose);
         rheaReceiver.session.connection.removeListener(ConnectionEvents.disconnected, onDisconnected);
+        console.log(
+          `Inside createReceiver() - removeListeners(), ${
+            ConnectionEvents.disconnected
+          } listeners count: ${rheaReceiver.session.connection.listenerCount(
+            ConnectionEvents.disconnected
+          )}`
+        );
       };
 
       onOpen = (context: RheaEventContext) => {
@@ -332,6 +353,13 @@ export class Session extends Entity {
       rheaReceiver.once(ReceiverEvents.receiverOpen, onOpen);
       rheaReceiver.once(ReceiverEvents.receiverClose, onClose);
       rheaReceiver.session.connection.on(ConnectionEvents.disconnected, onDisconnected);
+      console.log(
+        `Inside createReceiver(), ${
+          ConnectionEvents.disconnected
+        } listeners count: ${rheaReceiver.session.connection.listenerCount(
+          ConnectionEvents.disconnected
+        )}`
+      );
       waitTimer = setTimeout(actionAfterTimeout, this.connection.options!.operationTimeoutInSeconds! * 1000);
     });
   }
@@ -434,6 +462,13 @@ export class Session extends Entity {
         rheaSender.removeListener(SenderEvents.senderOpen, onSendable);
         rheaSender.removeListener(SenderEvents.senderClose, onClose);
         rheaSender.session.connection.removeListener(ConnectionEvents.disconnected, onDisconnected);
+        console.log(
+          `Inside createSender() - removeListeners(), ${
+            ConnectionEvents.disconnected
+          } listeners count: ${rheaSender.session.connection.listenerCount(
+            ConnectionEvents.disconnected
+          )}`
+        );
       };
 
       onSendable = (context: RheaEventContext) => {
@@ -473,6 +508,13 @@ export class Session extends Entity {
       rheaSender.once(SenderEvents.sendable, onSendable);
       rheaSender.once(SenderEvents.senderClose, onClose);
       rheaSender.session.connection.on(ConnectionEvents.disconnected, onDisconnected);
+      console.log(
+        `Inside createSender(), ${
+          ConnectionEvents.disconnected
+        } listeners count: ${rheaSender.session.connection.listenerCount(
+          ConnectionEvents.disconnected
+        )}`
+      );
       waitTimer = setTimeout(actionAfterTimeout, this.connection.options!.operationTimeoutInSeconds! * 1000);
     });
   }
